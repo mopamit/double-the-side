@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>מה קורה כשמכפילים את הצלע? – פריזמה</title>
+<!--
+  יישומון 8 · מרובעים כיתה ז · חלק 4: קשר לאלגברה
+  "מה קורה כשמכפילים את הצלע?" – גרסה לשער מפגש (הקרנה, ניבוי בזוגות, דיון במליאה)
+  מהלך: 1 ניבוי → 2 גילוי (הכפלה מונפשת) → 3 חקר (גרירת x, טבלה) → 4 השוואה (2x)² מול 2x²
+-->
+<style>
+  @font-face{font-family:"Simpler Pro";src:url("fonts/SimplerPro-Light.woff2") format("woff2"),url("fonts/SimplerPro-Light.woff") format("woff");font-weight:300;font-display:swap}
+  @font-face{font-family:"Simpler Pro";src:url("fonts/SimplerPro-Regular.woff2") format("woff2"),url("fonts/SimplerPro-Regular.woff") format("woff");font-weight:400;font-display:swap}
+  @font-face{font-family:"Simpler Pro";src:url("fonts/SimplerPro-Semibold.woff2") format("woff2"),url("fonts/SimplerPro-Semibold.woff") format("woff");font-weight:600;font-display:swap}
+  @font-face{font-family:"Simpler Pro";src:url("fonts/SimplerPro-Bold.woff2") format("woff2"),url("fonts/SimplerPro-Bold.woff") format("woff");font-weight:700;font-display:swap}
+
+  :root{
+    --blue:#17365e; --green:#6db580; --mustard:#e7b976; --bordo:#832058;
+    --line:#6f7f8f; --grid:#ece8de;
+    --bg:#f7f5ef; --card:#ffffff; --border:#e6e1d6;
+    --radius:20px;
+    --ui:"Simpler Pro", "Segoe UI", Arial, sans-serif;
+    --math:"Times New Roman", Georgia, serif;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *,*::before,*::after{box-sizing:inherit}
+  html{scroll-padding-top:env(safe-area-inset-top,0px)}
+  body{margin:0;min-height:100%;background:var(--bg);color:var(--blue);font-family:var(--ui);font-size:18px;line-height:1.55}
+
+  /* ===== פס עליון: לוגו פיזית משמאל, פעולות פיזית מימין – תמיד ===== */
+  .topbar{
+    direction:ltr;
+    display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:16px;
+    padding:12px clamp(12px,3vw,28px); background:var(--card); border-bottom:1px solid var(--border);
+  }
+  .topbar .logo{grid-column:1; height:42px; width:auto; display:block}
+  .topbar h1{grid-column:2; direction:rtl; text-align:center; margin:0; color:var(--bordo); font-weight:700; font-size:clamp(20px,2.4vw,28px); line-height:1.2}
+  .topbar .actions{grid-column:3; direction:rtl; display:flex; gap:10px}
+
+  .btn{font-family:var(--ui); font-size:16px; font-weight:600; border-radius:12px; padding:9px 18px; min-height:44px; cursor:pointer; border:1.5px solid var(--border); background:#fff; color:var(--blue)}
+  .btn:hover{background:#f3f1ea}
+  .btn.primary{background:var(--green); border-color:var(--green); color:#fff}
+  .btn.primary:hover{filter:brightness(.95)}
+  .btn:disabled{opacity:.45; cursor:not-allowed; filter:none}
+  .btn .m{font-size:1.08em}
+  :focus-visible{outline:3px solid var(--bordo); outline-offset:3px}
+
+  /* ===== אזור עבודה ===== */
+  main{display:grid; grid-template-columns:minmax(290px,370px) minmax(0,1fr); gap:22px; padding:22px clamp(12px,3vw,28px); max-width:1560px; margin:0 auto; align-items:start}
+  .card{background:var(--card); border:1px solid var(--border); border-radius:var(--radius); box-shadow:0 2px 10px rgba(23,54,94,.05)}
+  .instructions{padding:22px 24px}
+  .instructions h2{color:var(--bordo); font-size:clamp(22px,2.4vw,29px); margin:0 0 10px; line-height:1.25}
+  .instructions p{margin:0 0 12px}
+
+  .steps{display:flex; gap:6px; margin:0 0 16px; padding:0; list-style:none; flex-wrap:wrap}
+  .steps li{font-size:15px; font-weight:600; padding:4px 12px; border-radius:999px; border:1.5px solid var(--border); color:var(--line)}
+  .steps li.done{border-color:var(--green); color:var(--blue)}
+  .steps li.now{background:var(--bordo); border-color:var(--bordo); color:#fff}
+
+  .panel[hidden]{display:none}
+  .q{font-weight:600; margin:14px 0 8px}
+  .choices{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+  .choice{font-family:var(--ui); font-size:17px; font-weight:600; min-height:46px; border-radius:12px; border:1.5px solid var(--border); background:#fff; color:var(--blue); cursor:pointer}
+  .choice:hover{background:#f3f1ea}
+  .choice[aria-pressed="true"]{border-color:var(--bordo); background:rgba(131,32,88,.08); color:var(--bordo); box-shadow:inset 0 0 0 1px var(--bordo)}
+  .choice.wide{grid-column:1 / -1}
+  .go{margin-top:18px; width:100%; font-size:17px}
+
+  .talk{margin:16px 0 0; padding:12px 16px; border-radius:14px; background:rgba(231,185,118,.20); font-size:17px}
+  .talk b{color:var(--bordo)}
+
+  .result{margin:6px 0 0; padding:0; list-style:none}
+  .result li{padding:10px 14px; border-radius:12px; margin-bottom:8px; border:1.5px solid var(--border)}
+  .result li.ok{border-color:var(--green); background:rgba(109,181,128,.10)}
+  .result li.no{border-color:var(--mustard); background:rgba(231,185,118,.14)}
+  .result .big{font-weight:700; font-size:19px}
+  .result .pred{display:block; font-size:16px}
+
+  .stage{position:relative; padding:8px; min-width:0}
+  .stage canvas{display:block; width:100%; height:clamp(420px, calc(100vh - 190px), 820px); touch-action:none; border-radius:14px}
+
+  .tablewrap{padding:6px 10px 14px; overflow-x:auto}
+  .tablewrap h3{margin:4px 6px 8px; font-size:19px; color:var(--bordo)}
+  .tablewrap .empty{margin:0 6px 6px; color:var(--line); font-size:17px}
+  table{border-collapse:separate; border-spacing:0; width:100%; min-width:640px; font-size:17px; text-align:center}
+  th{font-weight:600; font-size:15px; line-height:1.3; padding:8px 6px; border-bottom:2px solid var(--border); vertical-align:bottom}
+  td{padding:7px 6px; border-bottom:1px solid var(--border); font-family:var(--math); font-size:19px}
+  th.ratio, td.ratio{background:rgba(109,181,128,.13)}
+  td.ratio{font-weight:700}
+  tr.cur td{background:rgba(231,185,118,.22)}
+  tr.cur td.ratio{background:rgba(109,181,128,.28)}
+
+  /* ===== מתמטיקה מבודדת מכיוון ה־RTL ===== */
+  .m{direction:ltr; unicode-bidi:isolate; font-family:var(--math); white-space:nowrap}
+  .m i{font-style:italic}
+  .m sup{font-size:.7em; line-height:0}
+
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+  @media (max-width:900px){
+    main{grid-template-columns:minmax(0,1fr)}
+    .stage{order:-1}
+    .stage canvas{height:auto; aspect-ratio:1000/700; min-height:280px}
+    .topbar .logo{height:32px}
+    .btn{padding:8px 12px; font-size:15px}
+  }
+  @media (max-width:520px){
+    .topbar{gap:8px}
+    .topbar h1{font-size:17px}
+    .instructions{padding:18px}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <img class="logo" src="brand/prismind-logo-600.png" alt="Prismind – פריזמה">
+  <h1>מה קורה כשמכפילים את הצלע?</h1>
+  <div class="actions">
+    <button class="btn" id="resetBtn" type="button">איפוס</button>
+  </div>
+</header>
+
+<main>
+  <section class="card instructions" aria-labelledby="instTitle">
+    <h2 id="instTitle">לפניכם יישומון הכפלת הצלע.</h2>
+    <ol class="steps" aria-label="שלבי הפעילות">
+      <li data-s="1">ניבוי</li><li data-s="2">גילוי</li><li data-s="3">חקר</li><li data-s="4">השוואה</li>
+    </ol>
+
+    <!-- שלב 1: ניבוי -->
+    <div class="panel" data-panel="1">
+      <p>לפניכם ריבוע שאורך צלעו <span class="m"><i>x</i></span>. נכפיל את אורך הצלע ונקבל ריבוע שאורך צלעו <span class="m">2<i>x</i></span>.</p>
+      <p class="q">פי כמה יגדל ההיקף?</p>
+      <div class="choices" role="group" aria-label="ניבוי: פי כמה יגדל ההיקף" data-key="P">
+        <button class="choice" type="button" data-v="2" aria-pressed="false">פי 2</button>
+        <button class="choice" type="button" data-v="3" aria-pressed="false">פי 3</button>
+        <button class="choice" type="button" data-v="4" aria-pressed="false">פי 4</button>
+        <button class="choice" type="button" data-v="dep" aria-pressed="false">תלוי באורך הצלע</button>
+      </div>
+      <p class="q">פי כמה יגדל השטח?</p>
+      <div class="choices" role="group" aria-label="ניבוי: פי כמה יגדל השטח" data-key="S">
+        <button class="choice" type="button" data-v="2" aria-pressed="false">פי 2</button>
+        <button class="choice" type="button" data-v="3" aria-pressed="false">פי 3</button>
+        <button class="choice" type="button" data-v="4" aria-pressed="false">פי 4</button>
+        <button class="choice" type="button" data-v="dep" aria-pressed="false">תלוי באורך הצלע</button>
+      </div>
+      <button class="btn primary go" id="doubleBtn" type="button" disabled>הכפילו את הצלע</button>
+      <p class="talk"><b>לדיון בזוגות:</b> החליטו על ניבוי משותף לפני שמכפילים. הסבירו זה לזה למה בחרתם כך.</p>
+    </div>
+
+    <!-- שלב 2: גילוי -->
+    <div class="panel" data-panel="2" hidden>
+      <ul class="result" id="result" aria-live="polite"></ul>
+      <p class="talk"><b>לדיון:</b> כמה ריבועים מקוריים נכנסים בריבוע החדש? למה השטח גדל יותר מההיקף?</p>
+      <button class="btn primary go" id="toExplore" type="button">המשיכו לחקר</button>
+    </div>
+
+    <!-- שלב 3: חקר -->
+    <div class="panel" data-panel="3" hidden>
+      <p>גררו את הפינה של הריבוע המקורי ושנו את <span class="m"><i>x</i></span>. כל אורך צלע שתנסו נכנס לטבלה.</p>
+      <p class="talk"><b>לדיון:</b> מה משתנה בטבלה? מה נשאר קבוע? האם התשובה תלויה באורך הצלע?</p>
+      <button class="btn primary go" id="toCompare" type="button">השוו בין <span class="m">(2<i>x</i>)<sup>2</sup></span> ל־<span class="m">2<i>x</i><sup>2</sup></span></button>
+    </div>
+
+    <!-- שלב 4: השוואה -->
+    <div class="panel" data-panel="4" hidden>
+      <p>משמאל: ריבוע שאורך צלעו <span class="m">2<i>x</i></span>. מימין: שני ריבועים שאורך צלעם <span class="m"><i>x</i></span>.</p>
+      <p>אפשר להמשיך לגרור את הפינה ולשנות את <span class="m"><i>x</i></span>.</p>
+      <p class="talk"><b>לדיון:</b> איזה ביטוי מתאר את שטח הריבוע החדש: <span class="m">(2<i>x</i>)<sup>2</sup></span> או <span class="m">2<i>x</i><sup>2</sup></span>? מה ההבדל ביניהם?</p>
+      <button class="btn go" id="backExplore" type="button">חזרה לחקר</button>
+    </div>
+
+    <p class="sr-only" id="kbHelp">מקלדת: עמדו על השרטוט, חץ למעלה או שמאלה מגדיל את אורך הצלע, חץ למטה או ימינה מקטין.</p>
+    <p class="sr-only" aria-live="polite" id="srReadout"></p>
+  </section>
+
+  <section class="card stage">
+    <canvas id="board" tabindex="0" role="img" aria-describedby="kbHelp" aria-label="ריבוע על רשת משבצות"></canvas>
+    <div class="tablewrap">
+      <h3>טבלת ערכים</h3>
+      <p class="empty" id="tableEmpty">הטבלה תתמלא אחרי שתכפילו את הצלע.</p>
+      <table id="table" hidden>
+        <thead><tr>
+          <th>אורך הצלע<br><span class="m"><i>x</i></span></th>
+          <th>הצלע החדשה<br><span class="m">2<i>x</i></span></th>
+          <th>היקף מקורי<br><span class="m">4<i>x</i></span></th>
+          <th>היקף חדש<br><span class="m">4·2<i>x</i></span></th>
+          <th class="ratio">פי כמה גדל<br>ההיקף?</th>
+          <th>שטח מקורי<br><span class="m"><i>x</i><sup>2</sup></span></th>
+          <th>שטח חדש<br><span class="m">(2<i>x</i>)<sup>2</sup></span></th>
+          <th class="ratio">פי כמה גדל<br>השטח?</th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<script>
+(() => {
+  /* ---------- קבועי עיצוב (מחייבים) ---------- */
+  const C = { blue:'#17365e', green:'#6db580', mustard:'#e7b976', bordo:'#832058', line:'#6f7f8f', grid:'#ece8de' };
+  const W = { line:2.2, aux:1.9, pointRing:3 };
+  const POINT_R = 7, HALO_R = 14, HIT_R = 24;
+  const FILL = 'rgba(231,185,118,.30)';          // מילוי הריבוע המקורי ושל כל עותק שלו
+  const CELL = 'rgba(23,54,94,.13)';             // קווי משבצות יחידה בתוך הריבועים
+
+  /* ---------- מודל ---------- */
+  // עולם בקנה מידה אחיד. U = משבצת אחת (יחידת אורך אחת).
+  const WORLD = { w:1000, h:700 };
+  const U = 42, RIGHT = 960, BASE = 500, GAP = 64;
+  const XMIN = 1, XMAX = 5, X0 = 3;
+  const STRIP_L = 320;                           // קצה שמאלי מקסימלי של פס ההיקף
+  const SU = (RIGHT - STRIP_L) / (8 * XMAX);     // קנה מידה של פסי ההיקף (8x המקסימלי ממלא את הרוחב)
+
+  const S = { x:X0, stage:1, pred:{}, visited:new Set(), anim:null, revealed:false };
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- Canvas + DPR ---------- */
+  const cv = document.getElementById('board'), ctx = cv.getContext('2d');
+  let cssW=0, cssH=0, sc=1, ox=0, oy=0;
+  function resize(){
+    const r = cv.getBoundingClientRect(), dpr = window.devicePixelRatio||1;
+    cssW=r.width; cssH=r.height;
+    cv.width=Math.round(cssW*dpr); cv.height=Math.round(cssH*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    sc = Math.min(cssW/WORLD.w, cssH/WORLD.h);
+    ox = (cssW-WORLD.w*sc)/2; oy = (cssH-WORLD.h*sc)/2;
+    draw();
+  }
+  new ResizeObserver(resize).observe(cv);
+  const compact = () => sc < 0.6;   // מסך צר: מוותרים על שורת השטח מתחת לריבועים (היא בטבלה)
+  const X = v => ox + v*sc, Y = v => oy + v*sc, L = v => v*sc;
+  const fromPx = (x,y) => ({x:(x-ox)/sc, y:(y-oy)/sc});
+
+  /* ---------- טקסט: מתמטיקה ב־LTR (x באיטליק), עברית ב־RTL ---------- */
+  function drawMath(str, wx, wy, px, color, align='center', weight=''){
+    const size = Math.max(13, px*Math.max(sc,.62));
+    const parts = str.split(/(x)/).filter(Boolean);
+    const fN = `${weight} ${size}px "Times New Roman", Georgia, serif`;
+    const fI = `italic ${weight} ${size}px "Times New Roman", Georgia, serif`;
+    ctx.save(); ctx.direction='ltr'; ctx.textAlign='left'; ctx.textBaseline='middle'; ctx.fillStyle=color;
+    let total=0; const ws=parts.map(p=>{ ctx.font = p==='x'?fI:fN; const w=ctx.measureText(p).width; total+=w; return w; });
+    let x = X(wx) - (align==='center'? total/2 : align==='right'? total : 0);
+    if(align==='center') x = Math.max(4, Math.min(cssW - total - 4, x));   // לא נחתך בקצה
+    parts.forEach((p,i)=>{ ctx.font = p==='x'?fI:fN; ctx.fillText(p, x, Y(wy)); x+=ws[i]; });
+    ctx.restore();
+  }
+  function drawHeb(str, wx, wy, px, color, weight=600){
+    const size = Math.max(13, px*Math.max(sc,.62));
+    ctx.save(); ctx.direction='rtl'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.font=`${weight} ${size}px "Simpler Pro", Arial, sans-serif`; ctx.fillStyle=color;
+    const half = ctx.measureText(str).width/2;
+    ctx.fillText(str, Math.max(half+4, Math.min(cssW-half-4, X(wx))), Y(wy)); ctx.restore();
+  }
+
+  /* ---------- ציור ריבוע עם משבצות יחידה ---------- */
+  function square(x0, y0, side, alpha=1){   // side ביחידות עולם
+    ctx.save(); ctx.globalAlpha=alpha;
+    ctx.fillStyle=FILL; ctx.fillRect(X(x0),Y(y0),L(side),L(side));
+    ctx.strokeStyle=CELL; ctx.lineWidth=1;
+    const n = Math.round(side/U);
+    for(let i=1;i<n;i++){
+      ctx.beginPath(); ctx.moveTo(X(x0+i*U),Y(y0)); ctx.lineTo(X(x0+i*U),Y(y0+side)); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(X(x0),Y(y0+i*U)); ctx.lineTo(X(x0+side),Y(y0+i*U)); ctx.stroke();
+    }
+    ctx.strokeStyle=C.blue; ctx.lineWidth=W.line; ctx.lineJoin='round';
+    ctx.strokeRect(X(x0),Y(y0),L(side),L(side));
+    ctx.restore();
+  }
+  // ריבוע שאורך צלעו 2x, מחולק לארבעה עותקים של המקורי
+  function doubledSquare(x0, y0, x, tileAlpha, nums){
+    const s = 2*x*U, h = x*U;
+    square(x0, y0, s);
+    if(tileAlpha>0){
+      ctx.save(); ctx.globalAlpha=tileAlpha; ctx.strokeStyle=C.blue; ctx.lineWidth=W.line; ctx.lineCap='round';
+      ctx.beginPath(); ctx.moveTo(X(x0+h),Y(y0)); ctx.lineTo(X(x0+h),Y(y0+s));
+      ctx.moveTo(X(x0),Y(y0+h)); ctx.lineTo(X(x0+s),Y(y0+h)); ctx.stroke(); ctx.restore();
+    }
+    // מספור העותקים 1–4 (סדר קריאה: מימין לשמאל, מלמעלה למטה)
+    const centers = [[x0+1.5*h,y0+.5*h],[x0+.5*h,y0+.5*h],[x0+1.5*h,y0+1.5*h],[x0+.5*h,y0+1.5*h]];
+    for(let k=0;k<4;k++){
+      const a = Math.max(0, Math.min(1, nums-k)); if(a<=0) continue;
+      const [cx,cy]=centers[k], r = Math.min(17, h*.36);
+      ctx.save(); ctx.globalAlpha=a;
+      ctx.fillStyle='#fff'; ctx.strokeStyle=C.bordo; ctx.lineWidth=2;
+      ctx.beginPath(); ctx.arc(X(cx),Y(cy),L(r),0,2*Math.PI); ctx.fill(); ctx.stroke();
+      ctx.restore();
+      ctx.save(); ctx.globalAlpha=a; drawMath(String(k+1), cx, cy+1, Math.min(20, r*1.15), C.bordo, 'center', '700'); ctx.restore();
+    }
+  }
+
+  /* ---------- פס היקף: 4 צלעות באורך x, זו אחר זו ---------- */
+  function strip(y, x, copies, progress){
+    const seg = x*SU, th = 14, gap = 5;
+    let right = RIGHT, drawnLen = 0;
+    const total = copies*4*seg + (copies-1)*gap, limit = total*progress;
+    for(let c=0;c<copies;c++){
+      for(let k=0;k<4;k++){
+        if(drawnLen>=limit) break;
+        const len = Math.min(seg, limit-drawnLen);
+        ctx.fillStyle = k%2===0 ? C.blue : 'rgba(23,54,94,.45)';
+        ctx.fillRect(X(right-len), Y(y-th/2), L(len), L(th));
+        right -= seg; drawnLen += seg;
+      }
+      right -= gap; drawnLen += gap;
+    }
+    return RIGHT - total;   // הקצה השמאלי
+  }
+
+  /* ---------- נקודת הגרירה ---------- */
+  let hover=false, drag=false, kb=false;
+  function cornerW(){ return {x:RIGHT - S.x*U, y:BASE - S.x*U}; }
+  function drawPoint(){
+    const p=cornerW(), Q={x:X(p.x),y:Y(p.y)}, active = hover||drag||kb;
+    if(active){ ctx.fillStyle='rgba(131,32,88,.15)'; ctx.beginPath(); ctx.arc(Q.x,Q.y,HALO_R,0,2*Math.PI); ctx.fill(); }
+    ctx.fillStyle='#fff'; ctx.strokeStyle=C.bordo; ctx.lineWidth=W.pointRing;
+    ctx.beginPath(); ctx.arc(Q.x,Q.y,POINT_R,0,2*Math.PI); ctx.fill(); ctx.stroke();
+    ctx.fillStyle=C.bordo; ctx.beginPath(); ctx.arc(Q.x,Q.y,2.2,0,2*Math.PI); ctx.fill();
+  }
+
+  /* ---------- מצב האנימציה ---------- */
+  // ציר זמן (ms): 0–900 גדילה · 900–1150 קווי חלוקה · 1150–2350 מספור 1–4 · 2350–2950 פס ההיקף החדש
+  function animValues(){
+    if(S.stage===1 && !S.anim) return null;
+    if(!S.anim) return {g:1, tiles:1, nums:4, strip:1};
+    const t = performance.now() - S.anim;
+    const ease = u => u<.5 ? 2*u*u : 1-Math.pow(-2*u+2,2)/2;
+    const cl = u => Math.max(0,Math.min(1,u));
+    return { g:ease(cl(t/900)), tiles:cl((t-900)/250), nums:cl((t-1150)/300)*4, strip:ease(cl((t-2350)/600)), done:t>=2950 };
+  }
+
+  /* ---------- ציור ---------- */
+  function draw(){
+    ctx.clearRect(0,0,cssW,cssH);
+    ctx.lineCap='round'; ctx.lineJoin='round';
+    const x = S.x;
+
+    // רשת רקע עדינה, מיושרת למשבצות של הריבועים
+    ctx.save(); ctx.strokeStyle=C.grid; ctx.lineWidth=1; ctx.setLineDash([2,4]);
+    for(let gx=RIGHT; gx>=RIGHT-22*U; gx-=U){ ctx.beginPath(); ctx.moveTo(X(gx),Y(26)); ctx.lineTo(X(gx),Y(BASE)); ctx.stroke(); }
+    for(let gy=BASE; gy>=26; gy-=U){ ctx.beginPath(); ctx.moveTo(X(RIGHT-22*U),Y(gy)); ctx.lineTo(X(RIGHT),Y(gy)); ctx.stroke(); }
+    ctx.restore();
+
+    if(S.stage===4) drawCompare(x); else drawDouble(x);
+    drawPoint();
+  }
+
+  function drawDouble(x){
+    const a = animValues();
+    const s1 = x*U, o = {x0:RIGHT-s1, y0:BASE-s1};
+    // הריבוע המקורי
+    square(o.x0, o.y0, s1);
+    drawHeb('הריבוע המקורי', o.x0 + s1/2, o.y0 - 24, 19, C.blue);
+    drawMath(`x = ${x}`, o.x0 + s1/2, BASE + 26, 21, C.blue);
+    if(!compact()) drawMath(`S = ${x*x}`, o.x0 + s1/2, BASE + 56, 20, C.blue);
+
+    // הריבוע החדש (מופיע רק אחרי הלחיצה על "הכפילו")
+    const R2 = RIGHT - s1 - GAP;
+    if(a){
+      const side = s1*(1 + a.g);
+      const x0 = R2 - side, y0 = BASE - side;
+      if(a.g<1){ square(x0, y0, side); }
+      else doubledSquare(x0, y0, x, a.tiles, a.nums);
+      drawHeb('הצלע הוכפלה', x0 + side/2, y0 - 24, 19, C.blue);
+      if(a.g>=1){
+        drawMath(`2x = ${2*x}`, x0 + side/2, BASE + 26, 21, C.blue);
+        if(a.nums>=4 && !compact()) drawMath(`S = ${4*x*x}`, x0 + side/2, BASE + 56, 20, C.blue);
+      }
+    }
+
+    // פסי ההיקף
+    const y1 = 628, y2 = 674;
+    const left1 = strip(y1, x, 1, 1);
+    drawMath(`P = 4x = ${4*x}`, left1 - 14, y1, 20, C.blue, 'right');
+    if(a && a.strip>0){
+      const left2 = strip(y2, x, 2, a.strip);
+      if(a.strip>=1) drawMath(`P = 8x = ${8*x}`, left2 - 14, y2, 20, C.blue, 'right');
+    }
+  }
+
+  function drawCompare(x){
+    const s1 = x*U;
+    // מימין: שני ריבועים מקוריים → 2x²
+    const pr = RIGHT, pl = RIGHT - 2*s1;
+    square(pr - s1, BASE - s1, s1);
+    square(pl, BASE - s1, s1);
+    drawHeb('שני ריבועים מקוריים', (pl+pr)/2, BASE - s1 - 44, 19, C.blue);
+    drawMath(`x = ${x}`, pr - s1/2, BASE + 26, 20, C.blue);
+    drawMath(`2x² = 2·${x}² = ${2*x*x}`, (pl+pr)/2, BASE + 66, 23, C.blue, 'center', '700');
+
+    // משמאל: ריבוע שצלעו 2x → (2x)²
+    const br = pl - GAP, side = 2*s1, bl = br - side;
+    doubledSquare(bl, BASE - side, x, 1, 4);
+    drawHeb('הריבוע שצלעו הוכפלה', bl + side/2, BASE - side - 24, 19, C.blue);
+    drawMath(`2x = ${2*x}`, bl + side/2, BASE + 26, 20, C.blue);
+    drawMath(`(2x)² = 4x² = ${4*x*x}`, bl + side/2, BASE + 66, 23, C.green, 'center', '700');
+    drawMath(`(2·${x})² = ${2*x}² = ${4*x*x}`, bl + side/2, BASE + 102, 20, C.blue);
+    drawMath(`2·${x*x} = ${2*x*x}`, (pl+pr)/2, BASE + 102, 20, C.blue);
+  }
+
+  /* ---------- קריאה לקורא מסך ותיאור השרטוט ---------- */
+  const srOut = document.getElementById('srReadout');
+  function describe(){
+    const x=S.x;
+    let t = `אורך הצלע x שווה ${x}. היקף ${4*x}, שטח ${x*x}.`;
+    if(S.stage>1) t += ` אחרי הכפלת הצלע: צלע ${2*x}, היקף ${8*x}, שטח ${4*x*x}. ההיקף גדל פי 2 והשטח פי 4.`;
+    if(S.stage===4) t += ` שני ריבועים שצלעם ${x}: שטח ${2*x*x}.`;
+    cv.setAttribute('aria-label', t);
+    srOut.textContent = t;
+  }
+
+  /* ---------- טבלה ---------- */
+  const tbody = document.getElementById('tbody'), table = document.getElementById('table'), empty = document.getElementById('tableEmpty');
+  function renderTable(){
+    const show = S.stage>1 && S.visited.size>0;
+    table.hidden = !show; empty.hidden = show;
+    if(!show) return;
+    tbody.replaceChildren(...[...S.visited].sort((a,b)=>a-b).map(x=>{
+      const tr=document.createElement('tr'); if(x===S.x) tr.className='cur';
+      const P1=4*x, P2=8*x, A1=x*x, A2=4*x*x;
+      const cells=[x,2*x,P1,P2,P2/P1,A1,A2,A2/A1];
+      cells.forEach((v,i)=>{ const td=document.createElement('td'); td.textContent=v; td.dir='ltr'; if(i===4||i===7) td.className='ratio'; tr.appendChild(td); });
+      return tr;
+    }));
+  }
+
+  /* ---------- שלבים ---------- */
+  const panels = [...document.querySelectorAll('.panel')], stepsEl=[...document.querySelectorAll('.steps li')];
+  function setStage(n){
+    S.stage=n;
+    panels.forEach(p=>p.hidden = Number(p.dataset.panel)!==n);
+    stepsEl.forEach(li=>{ const s=Number(li.dataset.s); li.className = s===n?'now':(s<n?'done':''); if(s===n) li.setAttribute('aria-current','step'); else li.removeAttribute('aria-current'); });
+    renderTable(); describe(); draw();
+  }
+
+  /* ---------- ניבוי ---------- */
+  const doubleBtn = document.getElementById('doubleBtn');
+  document.querySelectorAll('.choices').forEach(g=>{
+    g.addEventListener('click', e=>{
+      const b=e.target.closest('.choice'); if(!b || S.stage!==1) return;
+      g.querySelectorAll('.choice').forEach(c=>c.setAttribute('aria-pressed', String(c===b)));
+      S.pred[g.dataset.key]=b.dataset.v;
+      doubleBtn.disabled = !(S.pred.P && S.pred.S);
+    });
+  });
+  const predText = v => v==='dep' ? 'תלוי באורך הצלע' : `פי ${v}`;
+  function showResult(){
+    const rows = [
+      {name:'ההיקף', real:2, p:S.pred.P},
+      {name:'השטח',  real:4, p:S.pred.S},
+    ];
+    const el=document.getElementById('result');
+    el.replaceChildren(...rows.map(r=>{
+      const li=document.createElement('li'), ok = r.p===String(r.real);
+      li.className = ok?'ok':'no';
+      const big=document.createElement('span'); big.className='big'; big.textContent=`${r.name} גדל פי ${r.real}.`;
+      const pr=document.createElement('span'); pr.className='pred';
+      pr.textContent = ok ? `✓ כמו שניבאתם.` : (r.p==='dep' ? `ניבאתם: ${predText(r.p)}. נבדוק זאת בשלב החקר.` : `ניבאתם: ${predText(r.p)}.`);
+      li.append(big, pr); return li;
+    }));
+  }
+
+  function startDouble(){
+    if(S.stage!==1 || !(S.pred.P && S.pred.S)) return;
+    doubleBtn.disabled = true;
+    S.visited.add(S.x);
+    if(reduceMotion){ S.anim=null; showResult(); setStage(2); return; }
+    S.anim = performance.now(); S.stage = 1.5;                        // מצב ביניים: האנימציה רצה
+    panels.forEach(p=>p.hidden = p.dataset.panel!=='1');
+    const tick = ()=>{
+      if(S.anim===null) return;                                       // אופס באמצע האנימציה
+      const a = animValues(); draw();
+      if(a && a.done){ S.anim=null; showResult(); setStage(2); return; }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+  doubleBtn.addEventListener('click', startDouble);
+  document.getElementById('toExplore').addEventListener('click', ()=>setStage(3));
+  document.getElementById('toCompare').addEventListener('click', ()=>setStage(4));
+  document.getElementById('backExplore').addEventListener('click', ()=>setStage(3));
+
+  /* ---------- שינוי אורך הצלע ---------- */
+  function setX(v){
+    v = Math.max(XMIN, Math.min(XMAX, v));
+    if(v===S.x) return;
+    S.x = v;
+    if(S.stage>1) S.visited.add(v);
+    renderTable(); describe(); draw();
+  }
+  const busy = () => S.anim!==null;
+
+  /* ---------- Pointer Events: גרירה רציפה של פינת הריבוע ---------- */
+  function hit(px,py){ const p=cornerW(); return Math.hypot(X(p.x)-px, Y(p.y)-py) <= HIT_R; }
+  const local = e => { const r=cv.getBoundingClientRect(); return {x:e.clientX-r.left, y:e.clientY-r.top}; };
+  cv.addEventListener('pointerdown', e=>{
+    if(busy()) return;
+    const p=local(e); if(!hit(p.x,p.y)) return;
+    drag=true; kb=false; cv.setPointerCapture(e.pointerId); cv.style.cursor='grabbing'; e.preventDefault(); draw();
+  });
+  cv.addEventListener('pointermove', e=>{
+    const p=local(e);
+    if(drag){
+      const w=fromPx(p.x,p.y);
+      const v = ((RIGHT-w.x)/U + (BASE-w.y)/U)/2;    // הטלה על האלכסון: הריבוע נשאר ריבוע
+      setX(Math.round(v)); return;
+    }
+    const h = !busy() && hit(p.x,p.y);
+    if(h!==hover){ hover=h; cv.style.cursor=h?'grab':'default'; draw(); }
+  });
+  const end = ()=>{ if(!drag) return; drag=false; cv.style.cursor=hover?'grab':'default'; draw(); };
+  cv.addEventListener('pointerup', end); cv.addEventListener('pointercancel', end);
+  cv.addEventListener('pointerleave', ()=>{ if(!drag && hover){ hover=false; draw(); } });
+
+  /* ---------- מקלדת ---------- */
+  cv.addEventListener('focus', ()=>{ kb=true; draw(); });
+  cv.addEventListener('blur', ()=>{ kb=false; draw(); });
+  cv.addEventListener('keydown', e=>{
+    if(busy()) return;
+    const d = {ArrowUp:1, ArrowLeft:1, ArrowDown:-1, ArrowRight:-1}[e.key];
+    if(!d) return; e.preventDefault(); setX(S.x + d);
+  });
+
+  /* ---------- איפוס ---------- */
+  document.getElementById('resetBtn').addEventListener('click', ()=>{
+    S.x=X0; S.pred={}; S.visited=new Set(); S.anim=null;
+    document.querySelectorAll('.choice').forEach(c=>c.setAttribute('aria-pressed','false'));
+    doubleBtn.disabled=true;
+    document.getElementById('result').replaceChildren();
+    setStage(1);
+  });
+
+  setStage(1);
+  document.fonts?.ready.then(draw);
+  resize();
+})();
+</script>
+</body>
+</html>
